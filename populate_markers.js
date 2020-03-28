@@ -20,11 +20,6 @@ function populateMarkers(map) {
 
 	infowindow = new google.maps.InfoWindow();
 	service = new google.maps.places.PlacesService(map);
-	hospitalIconURL =
-		{
-			url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png"
-		};
-
 	supplies.forEach(iterate);
 }
 
