@@ -9,7 +9,10 @@ function populateMarkers(map) {
 			var myLatLng = new google.maps.LatLng(latLongs[i][0], latLongs[i][1]);
 			var marker = new google.maps.Marker({
 		    position: myLatLng,
-		    title:"Hello World!",
+		    title:"Hospital",
+				icon: {
+					url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
+				},
 		    map:map
 			});
 	}
