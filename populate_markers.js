@@ -12,10 +12,20 @@ function populateMarkers(map) {
 				url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
 			};
 
+			var defaultColor = getColorForResourceValue(0);
+			// need to figure out how to draw a cross shape
+			var hospitalStar = {
+          path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+          fillColor: defaultColor,
+          fillOpacity: 0.8,
+          scale: 0.1,
+          strokeWeight: 1
+        };
+
 			var marker = new google.maps.Marker({
 		    position: myLatLng,
 		    title:"Hospital",
-				icon: hospitalIconURL,
+				icon: hospitalStar,
 		    map:map
 			});
 	}
