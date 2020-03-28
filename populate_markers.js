@@ -15,12 +15,13 @@ function iterate(supply) {
 				var kits = supply[4];
 				var score = computeScoreForHospital(beds, masks, ventilators, kits);
 				var color = getColorForResourceValue(score);
-				// need to figure out how to draw a cross shape
 				var hospitalStar = {
-          path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+          path: 'M 10,10 l 90,90 M 100,10 l -90,90 z',
           fillColor: color,
           fillOpacity: 0.8,
-          scale: 0.1,
+          scale: 0.2,
+					strokeColor: color,
+					strokeWeight: 6,
 	       };
         var marker = new google.maps.Marker({
           map: map,
@@ -54,9 +55,9 @@ function getPlaceRequest(pid) {
 
 function getColorForResourceValue(resourceScore) {
 	const resourceStateToColorMapping = {
-    NEGATIVE: '#ff0000',
-    NEUTRAL: '#fffd00',
-    POSITIVE: '#00ff3d',
+    NEGATIVE: '#ea4235',
+    NEUTRAL: '#fbbc04',
+    POSITIVE: '#33a853',
 	}
 
 	if(resourceScore < 0) {
