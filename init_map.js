@@ -17,6 +17,11 @@ function getGeoLocation() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+				var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: 'Your current location'
+        });
         map.setCenter(pos);
       }, function() {
       });
