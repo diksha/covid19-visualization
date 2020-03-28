@@ -6,6 +6,7 @@ function initMap() {
 	});
 	getGeoLocation();
 	populateMarkers(map);
+	renderPatientViewButton(map);
   zoomEventHandler(map);
 }
 
