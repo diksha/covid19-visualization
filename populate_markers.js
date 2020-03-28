@@ -20,3 +20,19 @@ function populateMarkers(map) {
 			});
 	}
 }
+
+function getColorForResourceValue(resourceValue) {
+	const resourceStateToColorMapping = {
+    NEGATIVE: '#ff0000',
+    NEUTRAL: '#fffd00',
+    POSITIVE: '#00ff3d',
+	}
+
+	if(resourceValue < 0) {
+		return resourceStateToColorMapping.NEGATIVE;
+	} else if(resourceValue == 0) {
+		return resourceStateToColorMapping.NEUTRAL;
+	} else {
+		return resourceStateToColorMapping.POSITIVE;
+	}
+}
