@@ -11,7 +11,7 @@ function populateMarkers(map) {
 		    position: myLatLng,
 		    title:"Hello World!",
 				icon: {
-			    url: "/material-design-icons/maps/1x_web/ic_local_hospital_black_24dp.png"
+			    url: "https://maps.google.com/mapfiles/kml/shapes/library_maps.png"
 			  }
 				animation: google.maps.Animation.DROP,
 		    map:map
