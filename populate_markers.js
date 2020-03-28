@@ -1,9 +1,17 @@
 function populateMarkers(map) {
-	var myLatlng = new google.maps.LatLng(37.3688, -122.0363);
-	var marker = new google.maps.Marker({
-	    position: myLatlng,
-	    title:"Hello World!"
-	});
-	marker.setMap(map);
-	console.log("Hello World");
+	var latLongs = [
+			[37.3688, -122.0363],
+			[37.000, -122.0363],
+			[37.000, -121.0363],
+			[37.9, -122.0363],
+	]
+	for(i=0;i<latLongs.length;i++) {
+			var myLatLng = new google.maps.LatLng(latLongs[i][0], latLongs[i][1]);
+			var marker = new google.maps.Marker({
+		    position: myLatLng,
+		    title:"Hello World!",
+		    map:map
+			});
+	}
+	
 }
