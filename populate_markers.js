@@ -20,3 +20,23 @@ function populateMarkers(map) {
 			});
 	}
 }
+
+function getColorForResourceValue(resourceScore) {
+	const resourceStateToColorMapping = {
+    NEGATIVE: '#ff0000',
+    NEUTRAL: '#fffd00',
+    POSITIVE: '#00ff3d',
+	}
+
+	if(resourceScore < 0) {
+		return resourceStateToColorMapping.NEGATIVE;
+	} else if(resourceScore == 0) {
+		return resourceStateToColorMapping.NEUTRAL;
+	} else {
+		return resourceStateToColorMapping.POSITIVE;
+	}
+}
+
+function computeScoreForHospital(beds, masks, ventilators, kits) {
+	return beds + masks + ventilators + kits;
+}
