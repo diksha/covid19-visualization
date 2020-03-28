@@ -33,10 +33,10 @@ function iterate(supply) {
           infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
             'Address: ' + place.formatted_address + '<br>' +
             'Phone: ' + place.formatted_phone_number + '<br>' +
-            'Beds: ' + supply['beds'] + '<br>' +
-            'Masks: ' + supply['masks'] + '<br>' +
-            'Ventilators: ' + supply['ventilators'] + '<br>' +
-            'Kits: ' + supply['kits'] + '<br>' +
+            'Beds: ' + beds + '<br>' +
+            'Masks: ' + masks + '<br>' +
+            'Ventilators: ' + ventilators + '<br>' +
+            'Kits: ' + kits + '<br>' +
             '</div>');
           infowindow.open(map, this);
         });
