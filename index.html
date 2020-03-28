@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <script src="populate_markers.js" type="text/javascript"></script>
-    <script src="init_map.js" type="text/javascript"></script>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIQjnK6nUGOKvMag4c-0Y2-BHAPF2mwlU&callback=initMap"
-    async defer></script>
-  </body>
+<head>
+  <title>Simple Map</title>
+  <script src="populate_markers.js" type="text/javascript"></script>
+  <script src="init_map.js" type="text/javascript"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIQjnK6nUGOKvMag4c-0Y2-BHAPF2mwlU&callback=initMap"
+  async defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+</head>
+<body>
+    <div class="wrapper">
+        <div id="map"></div>
+        <div id="checklist">
+            <div id="myDIV" class="header">
+                <h2>Amenities</h2>
+            </div>
+            <input type="checkbox" id="masks" name="masks">
+            <label for="masks">Masks</label><br />
+            <input type="checkbox" id="ventilators" name="ventilators">
+            <label for="ventilators">Ventilators</label><br />
+            <input type="checkbox" id="beds" name="beds">
+            <label for="beds">Beds</label><br />
+        </div>
+    </div>
+</body>
 </html>
