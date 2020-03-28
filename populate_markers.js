@@ -21,18 +21,22 @@ function populateMarkers(map) {
 	}
 }
 
-function getColorForResourceValue(resourceValue) {
+function getColorForResourceValue(resourceScore) {
 	const resourceStateToColorMapping = {
     NEGATIVE: '#ff0000',
     NEUTRAL: '#fffd00',
     POSITIVE: '#00ff3d',
 	}
 
-	if(resourceValue < 0) {
+	if(resourceScore < 0) {
 		return resourceStateToColorMapping.NEGATIVE;
-	} else if(resourceValue == 0) {
+	} else if(resourceScore == 0) {
 		return resourceStateToColorMapping.NEUTRAL;
 	} else {
 		return resourceStateToColorMapping.POSITIVE;
 	}
+}
+
+function computeScoreForHospital(beds, masks, ventilators, kits) {
+	return beds + masks + ventilators + kits;
 }
