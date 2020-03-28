@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Simple Map</title>
+  <script src="calculate.js" type="text/javascript"></script>
   <script src="populate_markers.js" type="text/javascript"></script>
   <script src="init_map.js" type="text/javascript"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIQjnK6nUGOKvMag4c-0Y2-BHAPF2mwlU&callback=initMap"
@@ -11,18 +12,21 @@
   <meta charset="utf-8">
 </head>
 <body>
+
     <div class="wrapper">
         <div id="map"></div>
         <div id="checklist">
             <div id="myDIV" class="header">
                 <h2>Amenities</h2>
             </div>
-            <input type="checkbox" id="masks" name="masks" onclick="recalculate()">
+            <input type="checkbox" id="masks" name="masks" onclick="recalculate();">
             <label for="masks">Masks</label><br />
-            <input type="checkbox" id="ventilators" name="ventilators" onclick="recalculate()">
+            <input type="checkbox" id="ventilators" name="ventilators" onclick="recalculate();">
             <label for="ventilators">Ventilators</label><br />
-            <input type="checkbox" id="beds" name="beds" onclick="recalculate()">
+            <input type="checkbox" id="beds" name="beds" onclick="recalculate();">
             <label for="beds">Beds</label><br />
+            <input type="checkbox" id="kits" name="kits" onclick="recalculate();">
+            <label for="kits">Kits</label><br /><br />
         </div>
     </div>
 </body>
