@@ -26,11 +26,12 @@ function populateMarkers(map) {
 function iterate(supply) {
 	service.getDetails(getPlaceRequest(supply['placeId']), function(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-				var defaultColor = getColorForResourceValue(0);
+				var score = computeScoreForHospital(supply['beds'], supply['masks'], supply['ventilators'], supply['kits']);
+				var color = getColorForResourceValue(score);
 				// need to figure out how to draw a cross shape
 				var hospitalStar = {
           path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
-          fillColor: defaultColor,
+          fillColor: color,
           fillOpacity: 0.8,
           scale: 0.1,
           strokeWeight: 1
