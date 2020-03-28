@@ -6,6 +6,7 @@ function initMap() {
 	});
 	getGeoLocation();
 	populateMarkers(map);
+  zoomEventHandler(map);
 }
 
 function getGeoLocation() {
