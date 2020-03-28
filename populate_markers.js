@@ -1,10 +1,5 @@
 function populateMarkers(map) {
-	var latLongs = [
-			[37.3688, -122.0363],
-			[37.000, -122.0363],
-			[37.000, -121.0363],
-			[37.9, -122.0363],
-	]
+
 	var supplies = [
 	{ placeId:"ChIJxYu-ZtK2j4ARpLis1OcKNDM", beds:"-37", masks:"35", ventilators:"27", kits:"-25"},
 	{ placeId:"ChIJ_3X2kATNj4ARJq22N-TR2io", beds:"0", masks:"-5", ventilators:"15", kits:"29"},
@@ -25,7 +20,10 @@ function populateMarkers(map) {
 
 	infowindow = new google.maps.InfoWindow();
 	service = new google.maps.places.PlacesService(map);
-	var i = 0
+	hospitalIconURL =
+		{
+			url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png"
+		};
 	
 	supplies.forEach(iterate);
 }
@@ -33,9 +31,12 @@ function populateMarkers(map) {
 function iterate(supply) {
 	service.getDetails(getPlaceRequest(supply['placeId']), function(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
+
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location
+          position: place.geometry.location,
+          icon: hospitalIconURL,
+          title: "Hospital"
         });
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
@@ -58,4 +59,25 @@ function getPlaceRequest(pid) {
 			fields: ['name', 'formatted_phone_number', 'formatted_address', 'geometry']
 		}
 	return request
+}
+
+
+function getColorForResourceValue(resourceScore) {
+	const resourceStateToColorMapping = {
+    NEGATIVE: '#ff0000',
+    NEUTRAL: '#fffd00',
+    POSITIVE: '#00ff3d',
+	}
+
+	if(resourceScore < 0) {
+		return resourceStateToColorMapping.NEGATIVE;
+	} else if(resourceScore == 0) {
+		return resourceStateToColorMapping.NEUTRAL;
+	} else {
+		return resourceStateToColorMapping.POSITIVE;
+	}
+}
+
+function computeScoreForHospital(beds, masks, ventilators, kits) {
+	return beds + masks + ventilators + kits;
 }
