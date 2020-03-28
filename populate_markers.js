@@ -4,6 +4,10 @@ function populateMarkers(map) {
 	service = new google.maps.places.PlacesService(map);
 	supplies.forEach(iterate);
 }
+function recalculate() {
+	supplies = parseSuppliesCSVIntoArray();
+	supplies.forEach(iterate);
+}
 
 function iterate(supply) {
 	var placeID = supply[0];
@@ -70,7 +74,11 @@ function getColorForResourceValue(resourceScore) {
 }
 
 function computeScoreForHospital(beds, masks, ventilators, kits) {
-	return parseInt(beds) + parseInt(masks) + parseInt(ventilators) + parseInt(kits);
+	var masksSelected = document.getElementById('masks').checked;
+	var ventilatorsSelected = document.getElementById('ventilators').checked;
+	var bedsSelected  = document.getElementById('beds').checked;
+	var kitsSelected  = document.getElementById('kits').checked;
+	return bedsSelected * parseInt(beds) + masksSelected*parseInt(masks) + ventilatorsSelected*parseInt(ventilators) + kitsSelected*parseInt(kits);
 }
 
 function parseSuppliesCSVIntoArray() {
