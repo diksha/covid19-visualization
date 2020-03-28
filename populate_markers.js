@@ -19,14 +19,13 @@ function iterate(supply) {
 				var kits = supply[4];
 				var score = computeScoreForHospital(beds, masks, ventilators, kits);
 				var color = getColorForResourceValue(score);
-				var hospitalStar = {
-          path: 'M 10,10 l 90,90 M 100,10 l -90,90 z',
+				 var hospitalStar = {
+          path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
           fillColor: color,
-          fillOpacity: 0.8,
-          scale: 0.2,
-					strokeColor: color,
-					strokeWeight: 6,
-	       };
+          fillOpacity: 1,
+          scale: 0.1,
+					strokeWeight: 1,
+        };
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location,
