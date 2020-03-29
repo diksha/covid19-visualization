@@ -1,5 +1,8 @@
 var map;
 var placeInformationArray;
+countryMap = {};
+stateMap = {};
+cityMap = {};
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.3688, lng: -122.0363},
@@ -49,10 +52,8 @@ function getPlaceInformation(service) {
   }
   Promise.all(promises).then(() => { 
     populateMarkers(map, placeInformationArray);
-    renderPatientViewButton(map, placeInformationArray);
-  }).catch(error => { 
-    populateMarkers(map, placeInformationArray);
-    renderPatientViewButton(map, placeInformationArray);
+    googleDirections = new GoogleDirections();
+    renderPatientViewButton(map, placeInformationArray, googleDirections);
   });
 }
 
@@ -79,14 +80,37 @@ function serviceRequest(placeID, placeInformation, resolve) {
         placeInformation.push(place.formatted_address);
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
+        addToMaps(place, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
         placeInformationArray.push(placeInformation);
         resolve();
       } else {
         wait(1000);
-        resolve();
         serviceRequest(placeID, placeInformation, resolve);
       }
     });
+}
+
+function addToMaps(place, kits, beds, masks, ventilators) {
+  place.address_components.forEach( function(item) {
+    var component;
+    if (item.types.indexOf("country") > -1) {
+      component = getAddressComponentFromMap(countryMap, item.long_name);     
+    }  else if (item.types.indexOf("administrative_area_level_1") > -1) {
+      component = getAddressComponentFromMap(stateMap, item.long_name);
+    } else if (item.types.indexOf("locality") > -1) {
+      component = getAddressComponentFromMap(cityMap, item.long_name);
+    } else {
+      return;
+    }
+    if (component['loc'] == null) {
+      component['loc'] = place.geometry.location;
+    }
+    
+    addResourceToAddressComponent(component, 'kits', kits);
+    addResourceToAddressComponent(component, 'beds', beds);
+    addResourceToAddressComponent(component, 'masks', masks);
+    addResourceToAddressComponent(component, 'ventilators', ventilators);
+  });
 }
 
 function getPlaceRequest(pid) {

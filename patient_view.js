@@ -1,10 +1,16 @@
 var coords = new Array();
 var placeInformationArray;
-function renderPatientViewButton(map, placeInformationArr) {
+var shouldShowPatientView = false;
+var closestHospitalMarker = null;
+var PATIENT_VIEW_BUTTON_ID = 'patient_view_button';
+var PATIENT_VIEW_TEXT_ID = 'patient_view_text';
+
+function renderPatientViewButton(map, placeInformationArr, googleDirections) {
   placeInformationArray = placeInformationArr;
   var patientControlDiv = document.createElement('div');
   // Set CSS for the control border.
   var controlUI = document.createElement('div');
+  controlUI.id = PATIENT_VIEW_BUTTON_ID;
   controlUI.style.backgroundColor = '#fff';
   controlUI.style.border = '2px solid #555555';
   controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
@@ -16,6 +22,7 @@ function renderPatientViewButton(map, placeInformationArr) {
 
   // Set CSS for the control interior.
   var controlText = document.createElement('div');
+  controlText.id = PATIENT_VIEW_TEXT_ID;
   controlText.style.color = 'rgb(25,25,25)';
   controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
   controlText.style.fontSize = '16px';
@@ -25,23 +32,42 @@ function renderPatientViewButton(map, placeInformationArr) {
   controlText.innerHTML = 'Patient View';
   controlUI.appendChild(controlText);
   controlUI.addEventListener('click', function() {
-    computeClosestHospitalToPatient(map);
+    togglePatientView(map, googleDirections);
   });
   patientControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(patientControlDiv);
 }
 
-function computeClosestHospitalToPatient(map) {
+function togglePatientView(map, googleDirections) {
+  shouldShowPatientView = !shouldShowPatientView;
+  var button = document.getElementById(PATIENT_VIEW_BUTTON_ID);
+  var buttonText = document.getElementById(PATIENT_VIEW_TEXT_ID);
+
+  if(shouldShowPatientView) {
+    button.style.backgroundColor = '#20d568';
+    buttonText.style.color = '#fff';
+    computeClosestHospitalToPatient(map, googleDirections);
+  }
+  else {
+    button.style.backgroundColor = '#fff';
+    buttonText.style.color = 'rgb(25,25,25)';
+    getGeoLocation(); // Reset the view to current location
+    googleDirections.display.set('directions', null); // Delete route
+    closestHospitalMarker.setMap(null); // Delete closest hospital marker
+  }
+}
+
+function computeClosestHospitalToPatient(map, googleDirections) {
   if (!navigator.geolocation) {
     return;
   }
   navigator.geolocation.getCurrentPosition(function(position) {
     var patientLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    markClosestNHospitals(patientLocation, 1, map);
+    markClosestNHospitals(patientLocation, 1, map, googleDirections);
   });
 }
 
-function markClosestNHospitals(pt, numberOfResults, map) {
+function markClosestNHospitals(pt, numberOfResults, map, googleDirections) {
   var closest = [];
   for (var i = 0; i < placeInformationArray.length; i++) {
     if(placeInformationArray[i][1] > 0) {
@@ -55,7 +81,7 @@ function markClosestNHospitals(pt, numberOfResults, map) {
     lat: closestHospital.lat(),
     lng: closestHospital.lng(),
   };
-  var marker = new google.maps.Marker({
+  closestHospitalMarker = new google.maps.Marker({
     position: pos,
     map: map,
     icon: {
@@ -76,8 +102,8 @@ function markClosestNHospitals(pt, numberOfResults, map) {
     destination: end,
     travelMode: google.maps.TravelMode.DRIVING
 };
-  var directionsService = new google.maps.DirectionsService();
-  var directionsDisplay = new google.maps.DirectionsRenderer();
+  var directionsService = googleDirections.service;
+  var directionsDisplay = googleDirections.display;
   directionsService.route(request, function (response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);

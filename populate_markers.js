@@ -3,9 +3,7 @@ var ventilatorsSelected ;
 var bedsSelected ;
 var kitsSelected ;
 var markerArray;
-var countryMap = {};
-var stateMap = {};
-var cityMap = {}
+
 var placeInformationArray;
 function populateMarkers(map, placeInformationArr) {
 	infowindow = new google.maps.InfoWindow();
@@ -31,7 +29,7 @@ function iterate(supply) {
 	var address_components = supply[9];
 	var score = computeScoreForHospital(beds, masks, ventilators, kits);
 	var color = getColorForResourceValue(score);
-	addToMaps(address_components, kits, beds, masks, ventilators);
+	
 	var marker;
 	if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 		var hospitalStar = {
@@ -80,27 +78,6 @@ function iterate(supply) {
 			'Kits: ' + kits + '<br>' +
 			'</div>');
 		infowindow.open(map, this);
-	});
-}
-
-function addToMaps(address_components, kits, beds, masks, ventilators) {
-	address_components.forEach( function(item) {
-		var component;
-		
-		if (item.types.indexOf("country") > -1) {
-			component = getAddressComponentFromMap(countryMap, item.long_name);			
-		}  else if (item.types.indexOf("administrative_area_level_1") > -1) {
-			component = getAddressComponentFromMap(stateMap, item.long_name);
-		} else if (item.types.indexOf("locality") > -1) {
-			component = getAddressComponentFromMap(cityMap, item.long_name);
-		} else {
-			return;
-		}
-		
-		addResourceToAddressComponent(component, 'kits', kits);
-		addResourceToAddressComponent(component, 'beds', beds);
-		addResourceToAddressComponent(component, 'masks', masks);
-		addResourceToAddressComponent(component, 'ventilators', ventilators);
 	});
 }
 
