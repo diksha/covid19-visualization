@@ -8,6 +8,7 @@ function initMap() {
 		center: {lat: 37.3688, lng: -122.0363},
 		zoom: 8
 	});
+	renderHospitalTypesLegend(map);
 	renderAmenitiesLegend(map);
 	getGeoLocation();
   service = new google.maps.places.PlacesService(map);
