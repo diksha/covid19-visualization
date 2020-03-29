@@ -19,11 +19,14 @@ function recalculateWithZoom(event) {
 }
 
 function showCountryMap() {
-	repopulateMap(countryMap, google.maps.SymbolPath.CIRCLE);
+	squarePath = 'M -1,-1 1,-1 1,1 -1,1 z';
+	repopulateMap(countryMap, squarePath);
 }
 
 function showStateMap() {
-	repopulateMap(stateMap, google.maps.SymbolPath.CIRCLE);
+	trianglePath = 'M -1,-1 0,1 1,-1 z';
+
+	repopulateMap(stateMap, trianglePath);
 }
 
 function showMarkerMap() {
