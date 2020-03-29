@@ -66,12 +66,8 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
-<<<<<<< HEAD
-      }
-=======
         addToMaps(place.address_components, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
-      } 
->>>>>>> 6bc4305c6c61ccee6541aa6bdff6ae0c2070fe45
+      }
       resolve();
     });
   });
