@@ -8,7 +8,7 @@ function initMap() {
 		center: {lat: 37.3688, lng: -122.0363},
 		zoom: 8
 	});
-	renderLegend(map);
+	renderAmenitiesLegend(map);
 	getGeoLocation();
   service = new google.maps.places.PlacesService(map);
   getPlaceInformation(service);
@@ -50,7 +50,7 @@ function getPlaceInformation(service) {
   for(i=0;i<supplies.length;i++) {
     promises.push(getPlaceInfo(supplies[i], service));
   }
-  Promise.all(promises).then(() => { 
+  Promise.all(promises).then(() => {
     populateMarkers(map, placeInformationArray);
     googleDirections = new GoogleDirections();
     renderPatientViewButton(map, placeInformationArray, googleDirections);
@@ -94,7 +94,7 @@ function addToMaps(place, kits, beds, masks, ventilators) {
   place.address_components.forEach( function(item) {
     var component;
     if (item.types.indexOf("country") > -1) {
-      component = getAddressComponentFromMap(countryMap, item.long_name);     
+      component = getAddressComponentFromMap(countryMap, item.long_name);
     }  else if (item.types.indexOf("administrative_area_level_1") > -1) {
       component = getAddressComponentFromMap(stateMap, item.long_name);
     } else if (item.types.indexOf("locality") > -1) {
@@ -105,7 +105,7 @@ function addToMaps(place, kits, beds, masks, ventilators) {
     if (component['loc'] == null) {
       component['loc'] = place.geometry.location;
     }
-    
+
     addResourceToAddressComponent(component, 'kits', kits);
     addResourceToAddressComponent(component, 'beds', beds);
     addResourceToAddressComponent(component, 'masks', masks);

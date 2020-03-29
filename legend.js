@@ -1,5 +1,5 @@
-function renderLegend(map) {
-  var iconBase = '/icons/';
+function renderAmenitiesLegend(map) {
+  var iconBase = 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/';
   var icons = {
     positive: {
       name: 'Abundant',
@@ -20,7 +20,7 @@ function renderLegend(map) {
     var name = type.name;
     var icon = type.icon;
     var div = document.createElement('div');
-    div.innerHTML = '<img src="' + icon + '"> ' + name;
+    div.innerHTML = '<img src="' + icon + '" height="25" width="25" style="margin:0px 10px 5px"/>' + name;
     legend.appendChild(div);
   }
   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
