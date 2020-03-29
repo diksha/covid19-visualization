@@ -45,7 +45,7 @@ function iterate(supply) {
 		title = 'Hospital';
 	}
 	else if(type === hospitalType.PROVISIONAL) {
-		path = 'M150 0 L75 200 L225 200 Z';
+		path = 'M 60 0 L 120 0 L 180 60 L 180 120 L 120 180 L 60 180 L 0 120 L 0 60 Z';
 		title = 'Provisional Medical Facility';
 	}
 

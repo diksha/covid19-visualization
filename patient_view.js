@@ -72,8 +72,8 @@ function markClosestNHospitals(pt, numberOfResults, map, googleDirections) {
   var closest = [];
   for (var i = 0; i < placeInformationArray.length; i++) {
     if(placeInformationArray[i][1] > 0) {
-      placeInformationArray[i][5].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, placeInformationArray[i][5]);
-      closest.push(placeInformationArray[i][5]);
+      placeInformationArray[i][6].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, placeInformationArray[i][6]);
+      closest.push(placeInformationArray[i][6]);
     }
   }
   closest.sort(sortByDist);
@@ -86,7 +86,7 @@ function markClosestNHospitals(pt, numberOfResults, map, googleDirections) {
     position: pos,
     map: map,
     icon: {
-      url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
+      url: "https://raw.githubusercontent.com/medic/icon-library/master/forms_tasks_targets/PNGs/icon-people-nurse-crop%402x.png",
     },
     title: 'Closest Hospital',
   });

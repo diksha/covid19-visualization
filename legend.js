@@ -30,7 +30,7 @@ function renderHospitalTypesLegend(map) {
     },
     closestHospital: {
       name: 'Closest Hospital',
-      icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/hospital_1x.png',
+      icon: 'https://raw.githubusercontent.com/medic/icon-library/master/forms_tasks_targets/PNGs/icon-people-nurse-crop%402x.png',
     },
   };
   var legend = document.getElementsByName('medical_facility_legend')[0];
