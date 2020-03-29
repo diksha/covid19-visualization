@@ -8,6 +8,7 @@ function initMap() {
 		center: {lat: 37.3688, lng: -122.0363},
 		zoom: 8
 	});
+  renderZoomInOutData(map);
 	renderHospitalTypesLegend(map);
 	renderAmenitiesLegend(map);
 	getGeoLocation();
