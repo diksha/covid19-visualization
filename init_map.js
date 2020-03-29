@@ -60,6 +60,7 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.name);
         placeInformation.push(place.formatted_address);
         placeInformation.push(place.formatted_phone_number);
+        placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
       } 
       resolve();
