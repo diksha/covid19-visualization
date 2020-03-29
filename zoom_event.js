@@ -49,7 +49,6 @@ function repopulateMap(componentMap) {
 			icon: hospitalStar,
 			title: "Hospital"
 		});
-		console.log(marker);
 		markerArray.push(marker);
 		google.maps.event.addListener(marker, 'click', function() {
 			infowindow.setContent('<div><strong>' + key + '</strong><br>' +

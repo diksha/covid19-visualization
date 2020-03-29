@@ -84,7 +84,7 @@ function serviceRequest(placeID, placeInformation, resolve) {
         placeInformationArray.push(placeInformation);
         resolve();
       } else {
-        wait(1000);
+        wait(200);
         serviceRequest(placeID, placeInformation, resolve);
       }
     });
