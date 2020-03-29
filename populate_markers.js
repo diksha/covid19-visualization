@@ -4,43 +4,10 @@ var bedsSelected ;
 var kitsSelected ;
 var markerArray;
 var placeInformationArray;
-function populateMarkers(map) {
+function populateMarkers(map, placeInformationArr) {
 	infowindow = new google.maps.InfoWindow();
-	service = new google.maps.places.PlacesService(map);
-	getPlaceInformation(service);
-}
-
-function getPlaceInformation(service) {
-	placeInformationArray = new Array();
-	supplies = parseSuppliesCSVIntoArray();
-	promises = new Array();
-	for(i=0;i<supplies.length;i++) {
-		promises.push(getPlaceInfo(supplies[i], service));
-
-	}
-	Promise.all(promises).then(() => { 
-		recalculate();
-	});
-}
-
-function getPlaceInfo(supply, service) {
-	return new Promise(function(resolve,refuse) {
-		var placeInformation = new Array();
-		var placeID = supply[0];
-		for(j=0;j<supply.length;j++) {
-			placeInformation.push(supply[j]);
-		}
-		service.getDetails(getPlaceRequest(placeID), function(place, status) {
-			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				placeInformation.push(place.geometry.location);
-				placeInformation.push(place.name);
-				placeInformation.push(place.formatted_address);
-				placeInformation.push(place.formatted_phone_number);
-				placeInformationArray.push(placeInformation);
-			} 
-			resolve();
-		});
-	});
+	placeInformationArray = placeInformationArr;
+	recalculate();
 }
 
 function recalculate() {
@@ -97,6 +64,7 @@ function iterate(supply) {
 			title: "Hospital"
 		});
 	}
+	console.log(marker);
 	markerArray.push(marker);
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent('<div><strong>' + supply[6] + '</strong><br>' +
