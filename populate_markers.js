@@ -83,8 +83,8 @@ function iterate(supply) {
 	});
 }
 
-function addToMaps(address_components, kits, beds, masks, ventilators) {
-	address_components.forEach( function(item) {
+function addToMaps(place, kits, beds, masks, ventilators) {
+	place.address_components.forEach( function(item) {
 		var component;
 		
 		if (item.types.indexOf("country") > -1) {
@@ -95,6 +95,9 @@ function addToMaps(address_components, kits, beds, masks, ventilators) {
 			component = getAddressComponentFromMap(cityMap, item.long_name);
 		} else {
 			return;
+		}
+		if (component['loc'] == null) {
+			component['loc'] = place.geometry.location;
 		}
 		
 		addResourceToAddressComponent(component, 'kits', kits);

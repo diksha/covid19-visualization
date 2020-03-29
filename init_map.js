@@ -65,7 +65,7 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
-        addToMaps(place.address_components, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
+        addToMaps(place, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
       } 
       resolve();
     });
