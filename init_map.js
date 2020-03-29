@@ -14,22 +14,30 @@ function initMap() {
 
 function getGeoLocation() {
 // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-				var marker = new google.maps.Marker({
-            position: pos,
-            map: map,
-            title: 'Your current location'
-        });
-        map.setCenter(pos);
-				map.setZoom(14);
-      }, function() {
-      });
-   }
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    var marker = new google.maps.Marker({
+      position: pos,
+      map: map,
+      title: 'Your current location'
+    });
+    map.setCenter(pos);
+    map.setZoom(14);
+  }, function() {
+  });
+}
+}
+
+function wait(ms) {
+  var start = Date.now(),
+  now = start;
+  while (now - start < ms) {
+    now = Date.now();
+  }
 }
 
 function getPlaceInformation(service) {
@@ -38,10 +46,11 @@ function getPlaceInformation(service) {
   promises = new Array();
   for(i=0;i<supplies.length;i++) {
     promises.push(getPlaceInfo(supplies[i], service));
-
   }
   Promise.all(promises).then(() => { 
-    console.log('placeInformationArray', placeInformationArray);
+    populateMarkers(map, placeInformationArray);
+    renderPatientViewButton(map, placeInformationArray);
+  }).catch(error => { 
     populateMarkers(map, placeInformationArray);
     renderPatientViewButton(map, placeInformationArray);
   });
@@ -54,7 +63,16 @@ function getPlaceInfo(supply, service) {
     for(j=0;j<supply.length;j++) {
       placeInformation.push(supply[j]);
     }
-    service.getDetails(getPlaceRequest(placeID), function(place, status) {
+    serviceRequest(placeID, placeInformation, resolve);
+  });
+}
+
+function serviceRequest(placeID, placeInformation, resolve) {
+  if(placeID=='') {
+    resolve();
+    return;
+  }
+  service.getDetails(getPlaceRequest(placeID), function(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         placeInformation.push(place.geometry.location);
         placeInformation.push(place.name);
@@ -62,8 +80,19 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
-      } 
-      resolve();
+        resolve();
+      } else {
+        wait(1000);
+        resolve();
+        serviceRequest(placeID, placeInformation, resolve);
+      }
     });
-  });
+}
+
+function getPlaceRequest(pid) {
+  request = {
+    placeId: pid,
+    fields: ['name', 'formatted_phone_number', 'formatted_address', 'geometry', 'address_component']
+  }
+  return request;
 }

@@ -69,7 +69,6 @@ function iterate(supply) {
 			title: "Hospital"
 		});
 	}
-	console.log(marker);
 	markerArray.push(marker);
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent('<div><strong>' + supply[6] + '</strong><br>' +
