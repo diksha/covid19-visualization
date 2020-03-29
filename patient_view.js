@@ -40,9 +40,9 @@ function togglePatientView(map, googleDirections) {
     computeClosestHospitalToPatient(map, googleDirections);
   }
   else {
+    getGeoLocation(); // Reset the view to current location
     googleDirections.display.set('directions', null); // Delete route
     closestHospitalMarker.setMap(null); // Delete closest hospital marker
-    getGeoLocation(); // Reset the view to current location
   }
 }
 
