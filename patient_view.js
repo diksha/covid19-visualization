@@ -91,6 +91,7 @@ function markClosestNHospitals(pt, numberOfResults, map) {
         travelMode: google.maps.TravelMode.DRIVING
     };
     var directionsService = new google.maps.DirectionsService();
+      var directionsDisplay = new google.maps.DirectionsRenderer();
     directionsService.route(request, function (response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
           directionsDisplay.setDirections(response);
