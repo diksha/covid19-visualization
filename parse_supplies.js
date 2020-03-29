@@ -6,7 +6,7 @@ function parseSuppliesCSVIntoArray() {
 	request.send(null);
 	var csvData = new Array();
 	var jsonObject = request.responseText.split(/\r?\n|\r/);
-	for (var i = 0; i < jsonObject.length; i++) {
+	for (var i = 1; i < jsonObject.length; i++) {
 		csvData.push(jsonObject[i].split(','));
 	}
 	return csvData;

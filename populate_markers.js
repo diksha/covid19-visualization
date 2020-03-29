@@ -8,7 +8,6 @@ var placeInformationArray;
 function populateMarkers(map, placeInformationArr) {
 	infowindow = new google.maps.InfoWindow();
 	placeInformationArray = placeInformationArr;
-	console.log(countryMap);
 	recalculate();
 }
 
@@ -68,7 +67,6 @@ function iterate(supply) {
 			title: "Hospital"
 		});
 	}
-	console.log(marker);
 	markerArray.push(marker);
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent('<div><strong>' + supply[6] + '</strong><br>' +
@@ -80,27 +78,6 @@ function iterate(supply) {
 			'Kits: ' + kits + '<br>' +
 			'</div>');
 		infowindow.open(map, this);
-	});
-}
-
-function addToMaps(address_components, kits, beds, masks, ventilators) {
-	address_components.forEach( function(item) {
-		var component;
-		
-		if (item.types.indexOf("country") > -1) {
-			component = getAddressComponentFromMap(countryMap, item.long_name);			
-		}  else if (item.types.indexOf("administrative_area_level_1") > -1) {
-			component = getAddressComponentFromMap(stateMap, item.long_name);
-		} else if (item.types.indexOf("locality") > -1) {
-			component = getAddressComponentFromMap(cityMap, item.long_name);
-		} else {
-			return;
-		}
-		
-		addResourceToAddressComponent(component, 'kits', kits);
-		addResourceToAddressComponent(component, 'beds', beds);
-		addResourceToAddressComponent(component, 'masks', masks);
-		addResourceToAddressComponent(component, 'ventilators', ventilators);
 	});
 }
 

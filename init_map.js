@@ -17,22 +17,30 @@ function initMap() {
 
 function getGeoLocation() {
 // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-				var marker = new google.maps.Marker({
-            position: pos,
-            map: map,
-            title: 'Your current location'
-        });
-        map.setCenter(pos);
-				map.setZoom(14);
-      }, function() {
-      });
-   }
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    var marker = new google.maps.Marker({
+      position: pos,
+      map: map,
+      title: 'Your current location'
+    });
+    map.setCenter(pos);
+    map.setZoom(14);
+  }, function() {
+  });
+}
+}
+
+function wait(ms) {
+  var start = Date.now(),
+  now = start;
+  while (now - start < ms) {
+    now = Date.now();
+  }
 }
 
 function getPlaceInformation(service) {
@@ -41,12 +49,10 @@ function getPlaceInformation(service) {
   promises = new Array();
   for(i=0;i<supplies.length;i++) {
     promises.push(getPlaceInfo(supplies[i], service));
-
   }
-  Promise.all(promises).then(() => {
-    console.log('placeInformationArray', placeInformationArray);
+  Promise.all(promises).then(() => { 
     populateMarkers(map, placeInformationArray);
-		googleDirections = new GoogleDirections();
+    googleDirections = new GoogleDirections();
     renderPatientViewButton(map, placeInformationArray, googleDirections);
   });
 }
@@ -58,17 +64,59 @@ function getPlaceInfo(supply, service) {
     for(j=0;j<supply.length;j++) {
       placeInformation.push(supply[j]);
     }
-    service.getDetails(getPlaceRequest(placeID), function(place, status) {
+    serviceRequest(placeID, placeInformation, resolve);
+  });
+}
+
+function serviceRequest(placeID, placeInformation, resolve) {
+  if(placeID=='') {
+    resolve();
+    return;
+  }
+  service.getDetails(getPlaceRequest(placeID), function(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         placeInformation.push(place.geometry.location);
         placeInformation.push(place.name);
         placeInformation.push(place.formatted_address);
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
+        addToMaps(place, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
         placeInformationArray.push(placeInformation);
-        addToMaps(place.address_components, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
+        resolve();
+      } else {
+        wait(200);
+        serviceRequest(placeID, placeInformation, resolve);
       }
-      resolve();
     });
+}
+
+function addToMaps(place, kits, beds, masks, ventilators) {
+  place.address_components.forEach( function(item) {
+    var component;
+    if (item.types.indexOf("country") > -1) {
+      component = getAddressComponentFromMap(countryMap, item.long_name);     
+    }  else if (item.types.indexOf("administrative_area_level_1") > -1) {
+      component = getAddressComponentFromMap(stateMap, item.long_name);
+    } else if (item.types.indexOf("locality") > -1) {
+      component = getAddressComponentFromMap(cityMap, item.long_name);
+    } else {
+      return;
+    }
+    if (component['loc'] == null) {
+      component['loc'] = place.geometry.location;
+    }
+    
+    addResourceToAddressComponent(component, 'kits', kits);
+    addResourceToAddressComponent(component, 'beds', beds);
+    addResourceToAddressComponent(component, 'masks', masks);
+    addResourceToAddressComponent(component, 'ventilators', ventilators);
   });
+}
+
+function getPlaceRequest(pid) {
+  request = {
+    placeId: pid,
+    fields: ['name', 'formatted_phone_number', 'formatted_address', 'geometry', 'address_component']
+  }
+  return request;
 }
