@@ -3,6 +3,10 @@ var ventilatorsSelected ;
 var bedsSelected ;
 var kitsSelected ;
 var markerArray;
+var hospitalType = {
+	ESTABLISHED: 'ESTABLISHED',
+	PROVISIONAL: 'PROVISIONAL',
+};
 
 var placeInformationArray;
 function populateMarkers(map, placeInformationArr) {
@@ -30,14 +34,25 @@ function iterate(supply) {
 	var masks = supply[2];
 	var ventilators = supply[3];
 	var kits = supply[4];
-	var address_components = supply[9];
+	var type = supply[5];
+	var address_components = supply[10];
 	var score = computeScoreForHospital(beds, masks, ventilators, kits);
 	var color = getColorForResourceValue(score);
+	var path = "";
+	var label = "";
+	if(type === hospitalType.ESTABLISHED) {
+		path = 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z';
+		title = 'Hospital';
+	}
+	else if(type === hospitalType.PROVISIONAL) {
+		path = 'M150 0 L75 200 L225 200 Z';
+		title = 'Provisional Medical Facility';
+	}
 
 	var marker;
 	if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
-		var hospitalStar = {
-			path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+		var hospitalIcon = {
+			path: path,
 			fillColor: color,
 			fillOpacity: 1,
 			scale: 0.1,
@@ -47,8 +62,8 @@ function iterate(supply) {
 		marker =  new google.maps.Marker({
 			map: map,
 			position: supply[5],
-			icon: hospitalStar,
-			title: "Hospital",
+			icon: hospitalIcon,
+			title: title,
 			label: {
 				text:(score).toString(),
 				fontSize:'6px',
@@ -57,8 +72,8 @@ function iterate(supply) {
 			},
 		});
 	} else {
-		var hospitalStar = {
-			path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+		var hospitalIcon = {
+			path: path,
 			fillColor: color,
 			fillOpacity: 1,
 			scale: 0.1,
@@ -67,8 +82,8 @@ function iterate(supply) {
 		marker =  new google.maps.Marker({
 			map: map,
 			position: supply[5],
-			icon: hospitalStar,
-			title: "Hospital"
+			icon: hospitalIcon,
+			title: title,
 		});
 	}
 	markerArray.push(marker);

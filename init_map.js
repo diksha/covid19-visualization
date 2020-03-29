@@ -81,7 +81,7 @@ function serviceRequest(placeID, placeInformation, resolve) {
         placeInformation.push(place.formatted_address);
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
-        addToMaps(place, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
+        addToMaps(place, placeInformation[5], placeInformation[2], placeInformation[3], placeInformation[4]);
         placeInformationArray.push(placeInformation);
         resolve();
       } else {
