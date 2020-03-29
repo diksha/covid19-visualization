@@ -40,10 +40,11 @@ function getPlaceInformation(service) {
     promises.push(getPlaceInfo(supplies[i], service));
 
   }
-  Promise.all(promises).then(() => { 
+  Promise.all(promises).then(() => {
     console.log('placeInformationArray', placeInformationArray);
     populateMarkers(map, placeInformationArray);
-    renderPatientViewButton(map, placeInformationArray);
+		googleDirections = new GoogleDirections();
+    renderPatientViewButton(map, placeInformationArray, googleDirections);
   });
 }
 
@@ -62,7 +63,7 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
-      } 
+      }
       resolve();
     });
   });

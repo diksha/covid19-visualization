@@ -1,6 +1,9 @@
 var coords = new Array();
 var placeInformationArray;
-function renderPatientViewButton(map, placeInformationArr) {
+var shouldShowPatientView = false;
+var closestHospitalMarker = null;
+
+function renderPatientViewButton(map, placeInformationArr, googleDirections) {
   placeInformationArray = placeInformationArr;
   var patientControlDiv = document.createElement('div');
   // Set CSS for the control border.
@@ -25,23 +28,35 @@ function renderPatientViewButton(map, placeInformationArr) {
   controlText.innerHTML = 'Patient View';
   controlUI.appendChild(controlText);
   controlUI.addEventListener('click', function() {
-    computeClosestHospitalToPatient(map);
+    togglePatientView(map, googleDirections);
   });
   patientControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(patientControlDiv);
 }
 
-function computeClosestHospitalToPatient(map) {
+function togglePatientView(map, googleDirections) {
+  shouldShowPatientView = !shouldShowPatientView;
+  if(shouldShowPatientView) {
+    computeClosestHospitalToPatient(map, googleDirections);
+  }
+  else {
+    googleDirections.display.set('directions', null); // Delete route
+    closestHospitalMarker.setMap(null); // Delete closest hospital marker
+    getGeoLocation(); // Reset the view to current location
+  }
+}
+
+function computeClosestHospitalToPatient(map, googleDirections) {
   if (!navigator.geolocation) {
     return;
   }
   navigator.geolocation.getCurrentPosition(function(position) {
     var patientLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    markClosestNHospitals(patientLocation, 1, map);
+    markClosestNHospitals(patientLocation, 1, map, googleDirections);
   });
 }
 
-function markClosestNHospitals(pt, numberOfResults, map) {
+function markClosestNHospitals(pt, numberOfResults, map, googleDirections) {
   var closest = [];
   for (var i = 0; i < placeInformationArray.length; i++) {
     if(placeInformationArray[i][1] > 0) {
@@ -55,7 +70,7 @@ function markClosestNHospitals(pt, numberOfResults, map) {
     lat: closestHospital.lat(),
     lng: closestHospital.lng(),
   };
-  var marker = new google.maps.Marker({
+  closestHospitalMarker = new google.maps.Marker({
     position: pos,
     map: map,
     icon: {
@@ -76,8 +91,8 @@ function markClosestNHospitals(pt, numberOfResults, map) {
     destination: end,
     travelMode: google.maps.TravelMode.DRIVING
 };
-  var directionsService = new google.maps.DirectionsService();
-  var directionsDisplay = new google.maps.DirectionsRenderer();
+  var directionsService = googleDirections.service;
+  var directionsDisplay = googleDirections.display;
   directionsService.route(request, function (response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
