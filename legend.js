@@ -31,19 +31,19 @@ function renderHospitalTypesLegend(map) {
     closestHospital: {
       name: 'Closest Hospital',
       icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/hospital_1x.png',
-    }
+    },
     countryView: {
       name: 'Country data',
       icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/countryView.png',
-    }
+    },
     stateView: {
       name: 'State data',
       icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/stateView.png',
-    }
+    },
     cityView: {
       name: 'City data',
       icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/cityView.png',
-    }
+    },
   };
   var legend = document.getElementsByName('medical_facility_legend')[0];
   renderLegends(icons, legend);
