@@ -11,11 +11,15 @@ function populateMarkers(map, placeInformationArr) {
 	recalculate();
 }
 
-function recalculate() {
+function getSelectedResources() {
 	masksSelected = document.getElementById('masks').checked ? 1 : 0;
 	ventilatorsSelected = document.getElementById('ventilators').checked ? 1 : 0;
 	bedsSelected  = document.getElementById('beds').checked ? 1 : 0;
 	kitsSelected  = document.getElementById('kits').checked ? 1 : 0;
+}
+
+function recalculate() {
+	getSelectedResources();
 	clearAllMarkers();
 	placeInformationArray.forEach(iterate);
 }
@@ -29,7 +33,7 @@ function iterate(supply) {
 	var address_components = supply[9];
 	var score = computeScoreForHospital(beds, masks, ventilators, kits);
 	var color = getColorForResourceValue(score);
-	
+
 	var marker;
 	if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 		var hospitalStar = {
