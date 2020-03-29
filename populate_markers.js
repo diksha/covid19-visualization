@@ -3,6 +3,10 @@ var ventilatorsSelected ;
 var bedsSelected ;
 var kitsSelected ;
 var markerArray;
+var countryMap = {};
+var stateMap = {};
+var cityMap = {}
+
 function populateMarkers(map) {
 	infowindow = new google.maps.InfoWindow();
 	service = new google.maps.places.PlacesService(map);
@@ -16,6 +20,7 @@ function recalculate() {
 	kitsSelected  = document.getElementById('kits').checked ? 1 : 0;
 	supplies = parseSuppliesCSVIntoArray();
 	supplies.forEach(iterate);
+	console.log(countryMap);
 }
 
 function iterate(supply) {
@@ -29,7 +34,7 @@ function iterate(supply) {
 			var kits = supply[4];
 			var score = computeScoreForHospital(beds, masks, ventilators, kits);
 			var color = getColorForResourceValue(score);
-
+			addToMaps(place, kits, beds, masks, ventilators);
 			var marker;
 			if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 				var hospitalStar = {
@@ -83,6 +88,41 @@ function iterate(supply) {
 	});
 }
 
+function addToMaps(place, kits, beds, masks, ventilators) {
+	place.address_components.forEach( function(item) {
+		var component;
+		
+		if (item.types.indexOf("country") > -1) {
+			component = getAddressComponentFromMap(countryMap, item.long_name);			
+		}  else if (item.types.indexOf("administrative_area_level_1") > -1) {
+			component = getAddressComponentFromMap(stateMap, item.long_name);
+		} else if (item.types.indexOf("locality") > -1) {
+			component = getAddressComponentFromMap(cityMap, item.long_name);
+		} else {
+			return;
+		}
+		
+		addResourceToAddressComponent(component, 'kits', kits);
+		addResourceToAddressComponent(component, 'beds', beds);
+		addResourceToAddressComponent(component, 'masks', masks);
+		addResourceToAddressComponent(component, 'ventilators', ventilators);
+	});
+}
+
+function getAddressComponentFromMap(map, name) {
+	if (map[name] == null) {
+		map[name] = {};
+	}
+	return map[name];
+}
+
+function addResourceToAddressComponent(component, resource, amount) {
+	if (component[resource] == null) {
+		component[resource] = 0;
+	}
+	component[resource] += parseInt(amount);
+}
+
 function clearAllMarkers() {
 	if(!markerArray) markerArray = [];
 	for(i=0;i<markerArray.length;i++) {
@@ -94,7 +134,7 @@ function clearAllMarkers() {
 function getPlaceRequest(pid) {
 	request = {
 		placeId: pid,
-		fields: ['name', 'formatted_phone_number', 'formatted_address', 'geometry']
+		fields: ['name', 'formatted_phone_number', 'formatted_address', 'geometry', 'address_component']
 	}
 	return request;
 }
