@@ -41,21 +41,11 @@ function computeClosestHospitalToPatient(map) {
 }
 
 function markClosestNHospitals(pt, numberOfResults, map) {
-  var url = "https://raw.githubusercontent.com/diksha/covid19-visualization/master/supplies.csv";
-	var request = new XMLHttpRequest();
-	request.open("GET", url, false);
-	request.send(null);
-	var markers = new Array();
-	var jsonObject = request.responseText.split(/\r?\n|\r/);
-	for (var i = 1; i < jsonObject.length; i++) {
-    var columns = jsonObject[i].split(',');
-		markers.push(columns[0]);
-	}
-
+  supplies = parseSuppliesCSVIntoArray();
   var promises = [];
   service = new google.maps.places.PlacesService(map);
-  for(var i=0;i<markers.length;i++){
-    promises.push(addCoordinates(markers[i], service));
+  for(var i=0;i<supplies.length;i++){
+    promises.push(addCoordinates(supplies[i], service));
   }
   Promise.all(promises).then(() => {
     var closest = [];
@@ -108,9 +98,9 @@ function sortByDist(a, b) {
   return (a.distance - b.distance);
 }
 
-function addCoordinates(marker, service) {
+function addCoordinates(supply, service) {
   return new Promise(function(resolve,refuse) {
-    service.getDetails(getPlaceRequest(marker), function(place, status) {
+    service.getDetails(getPlaceRequest(supply[0]), function(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         var coordinates = place.geometry.location;
         coords.push(coordinates);
