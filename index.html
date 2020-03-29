@@ -21,36 +21,39 @@
         padding: 10px;
         margin: 10px;
         border: 3px solid #000;
-      }
-      #legend h3 {
+    }
+    #legend h3 {
         margin-top: 0;
-      }
-      #legend img {
+    }
+    #legend img {
         vertical-align: middle;
-      }
-  </style>
+    }
+</style>
 </head>
-<body>
-
+<body >
     <div id="title" style="color:white;background-color:black;font-size:40px">Coronavirus COVID-19 Hospital Information</div>
-    <div class="wrapper">
-        <div id="map"></div>
-        <div id="legend"><h3>Amenities Legend</h3></div>
-        <div id="checklist">
-            <font color="white">
-                <div id="myDIV" class="header">
-                    <h2>Amenities</h2>
-                </div>
-                <input type="checkbox" id="masks" name="masks" onclick="recalculate();">
-                <label for="masks">Masks</label><br />
-                <input type="checkbox" id="ventilators" name="ventilators" onclick="recalculate();">
-                <label for="ventilators">Ventilators</label><br />
-                <input type="checkbox" id="beds" name="beds" onclick="recalculate();">
-                <label for="beds">Beds</label><br />
-                <input type="checkbox" id="kits" name="kits" onclick="recalculate();">
-                <label for="kits">Kits</label><br /><br />
+    <div id="body">
+        <div class="wrapper">
+            <div id="map"></div>
+            <div id="legend"><h3>Amenities Legend</h3></div>
+            <div id="checklist">
+                <font color="white">
+                    <div id="myDIV" class="header">
+                        <h2>Amenities</h2>
+                    </div>
+                    <input type="checkbox" id="masks" name="masks" onclick="recalculate();">
+                    <label for="masks">Masks</label><br />
+                    <input type="checkbox" id="ventilators" name="ventilators" onclick="recalculate();">
+                    <label for="ventilators">Ventilators</label><br />
+                    <input type="checkbox" id="beds" name="beds" onclick="recalculate();">
+                    <label for="beds">Beds</label><br />
+                    <input type="checkbox" id="kits" name="kits" onclick="recalculate();">
+                    <label for="kits">Kits</label><br /><br />
+                </font>
             </div>
-        </font>
+        </div>
+        <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+        <div id="statistics" class="elfsight-app-4cc139dd-6254-4e87-bee5-8ffa6a059e38"></div>
     </div>
 </body>
 </html>

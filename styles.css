@@ -2,16 +2,16 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color:#000000;
 }
 div.wrapper {
-  position: relative;
-  width: 100%;
+  width: 70%;
   height: 100%;
 }
 #map {
-  height: 90%;
+  height: 100%;
   position: absolute;
-  width: 100%;
+  width: 70%;
 }
 div#checklist {
   left:30px;
@@ -21,4 +21,13 @@ div#checklist {
   background: #20d568;
   border: 1px solid #ffffff;
   padding: 10px;
+}
+div#statistics{
+  width:30%;
+  height:100%;
+}
+#body{
+  height: 100%;
+  width: 100%;
+  display: flex;
 }
