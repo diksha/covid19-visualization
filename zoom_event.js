@@ -19,11 +19,14 @@ function recalculateWithZoom(event) {
 }
 
 function showCountryMap() {
-	repopulateMap(countryMap);
+	squarePath = 'M -1,-1 1,-1 1,1 -1,1 z';
+	repopulateMap(countryMap, squarePath);
 }
 
 function showStateMap() {
-	repopulateMap(stateMap);
+	trianglePath = 'M -1,-1 0,1 1,-1 z';
+
+	repopulateMap(stateMap, trianglePath);
 }
 
 function showMarkerMap() {
@@ -31,10 +34,10 @@ function showMarkerMap() {
 }
 
 function showCityMap() {
-	repopulateMap(cityMap);
+	repopulateMap(cityMap, google.maps.SymbolPath.CIRCLE);
 }
 
-function repopulateMap(componentMap) {
+function repopulateMap(componentMap, iconPath) {
 	getSelectedResources();
 	clearAllMarkers();
 	var keys = Object.keys(componentMap);
@@ -48,18 +51,18 @@ function repopulateMap(componentMap) {
 		console.log(score);
 		console.log(color);
 
-		var hospitalStar = {
-			path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+		var markerIcon = {
+			path: iconPath,
 			fillColor: color,
 			fillOpacity: 1,
-			scale: 0.1,
+			scale: 10,
 			strokeWeight: 1,
 		};
 
 		marker =  new google.maps.Marker({
 			map: map,
 			position: componentMap[key]['loc'],
-			icon: hospitalStar,
+			icon: markerIcon,
 			title: "Hospital"
 		});
 		markerArray.push(marker);
