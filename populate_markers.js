@@ -29,7 +29,7 @@ function iterate(supply) {
 			var kits = supply[4];
 			var score = computeScoreForHospital(beds, masks, ventilators, kits);
 			var color = getColorForResourceValue(score);
-			
+
 			var marker;
 			if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 				var hospitalStar = {
@@ -66,7 +66,7 @@ function iterate(supply) {
 					icon: hospitalStar,
 					title: "Hospital"
 				});
-			} 
+			}
 			markerArray.push(marker);
 			google.maps.event.addListener(marker, 'click', function() {
 				infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
