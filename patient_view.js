@@ -76,18 +76,18 @@ function markClosestNHospitals(pt, numberOfResults, map) {
     bounds.extend(end);
     map.fitBounds(bounds);
     var request = {
-        origin: start,
-        destination: end,
-        travelMode: google.maps.TravelMode.DRIVING
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.DRIVING
     };
     var directionsService = new google.maps.DirectionsService();
-      var directionsDisplay = new google.maps.DirectionsRenderer();
+    var directionsDisplay = new google.maps.DirectionsRenderer();
     directionsService.route(request, function (response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
-          directionsDisplay.setMap(map);
+        directionsDisplay.setDirections(response);
+        directionsDisplay.setMap(map);
       } else {
-          alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+        alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
       }
     });
   });
@@ -100,12 +100,16 @@ function sortByDist(a, b) {
 
 function addCoordinates(supply, service) {
   return new Promise(function(resolve,refuse) {
-    service.getDetails(getPlaceRequest(supply[0]), function(place, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        var coordinates = place.geometry.location;
-        coords.push(coordinates);
-      }
+    if(supply[1] > 0) {
+      service.getDetails(getPlaceRequest(supply[0]), function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          var coordinates = place.geometry.location;
+          coords.push(coordinates);
+        }
+        resolve();
+      });
+    } else {
       resolve();
-    });
+    }
   });
 }
