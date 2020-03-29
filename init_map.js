@@ -24,6 +24,7 @@ function getGeoLocation() {
             title: 'Your current location'
         });
         map.setCenter(pos);
+				map.setZoom(14);
       }, function() {
       });
    }
