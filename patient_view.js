@@ -78,6 +78,7 @@ function markClosestNHospitals(pt, numberOfResults, map) {
       },
       title: 'Closest Hospital',
     });
+    map.setCenter(pos);
   });
 }
 
