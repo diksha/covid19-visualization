@@ -1,7 +1,8 @@
 var coords = new Array();
-
-function renderPatientViewButton(map) {
-	var patientControlDiv = document.createElement('div');
+var placeInformationArray;
+function renderPatientViewButton(map, placeInformationArr) {
+  placeInformationArray = placeInformationArr;
+  var patientControlDiv = document.createElement('div');
   // Set CSS for the control border.
   var controlUI = document.createElement('div');
   controlUI.style.backgroundColor = '#fff';
@@ -41,75 +42,53 @@ function computeClosestHospitalToPatient(map) {
 }
 
 function markClosestNHospitals(pt, numberOfResults, map) {
-  supplies = parseSuppliesCSVIntoArray();
-  var promises = [];
-  service = new google.maps.places.PlacesService(map);
-  for(var i=0;i<supplies.length;i++){
-    promises.push(addCoordinates(supplies[i], service));
-  }
-  Promise.all(promises).then(() => {
-    var closest = [];
-    for (var i = 0; i < coords.length; i++) {
-      coords[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, coords[i]);
-      closest.push(coords[i]);
+  var closest = [];
+  for (var i = 0; i < placeInformationArray.length; i++) {
+    if(placeInformationArray[i][1] > 0) {
+      placeInformationArray[i][5].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, placeInformationArray[i][5]);
+      closest.push(placeInformationArray[i][5]);
     }
-    closest.sort(sortByDist);
-    var closestHospital = closest[0];
-    var pos = {
-      lat: closestHospital.lat(),
-      lng: closestHospital.lng(),
-    };
-    var marker = new google.maps.Marker({
-      position: pos,
-      map: map,
-      icon: {
-        url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
-      },
-      title: 'Closest Hospital',
-    });
-    map.setCenter(pos);
+  }
+  closest.sort(sortByDist);
+  var closestHospital = closest[0];
+  var pos = {
+    lat: closestHospital.lat(),
+    lng: closestHospital.lng(),
+  };
+  var marker = new google.maps.Marker({
+    position: pos,
+    map: map,
+    icon: {
+      url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
+    },
+    title: 'Closest Hospital',
+  });
+  map.setCenter(pos);
 
-    var start = pt;
-    var end = closestHospital;
-    var bounds = new google.maps.LatLngBounds();
-    bounds.extend(start);
-    bounds.extend(end);
-    map.fitBounds(bounds);
-    var request = {
-      origin: start,
-      destination: end,
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-    var directionsService = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
-    directionsService.route(request, function (response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-        directionsDisplay.setMap(map);
-      } else {
-        alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
-      }
-    });
+  var start = pt;
+  var end = closestHospital;
+  var bounds = new google.maps.LatLngBounds();
+  bounds.extend(start);
+  bounds.extend(end);
+  map.fitBounds(bounds);
+  var request = {
+    origin: start,
+    destination: end,
+    travelMode: google.maps.TravelMode.DRIVING
+};
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsService.route(request, function (response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+      directionsDisplay.setMap(map);
+    } else {
+      alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+    }
   });
 }
 
 
 function sortByDist(a, b) {
   return (a.distance - b.distance);
-}
-
-function addCoordinates(supply, service) {
-  return new Promise(function(resolve,refuse) {
-    if(supply[1] > 0) {
-      service.getDetails(getPlaceRequest(supply[0]), function(place, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          var coordinates = place.geometry.location;
-          coords.push(coordinates);
-        }
-        resolve();
-      });
-    } else {
-      resolve();
-    }
-  });
 }
