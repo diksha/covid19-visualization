@@ -36,30 +36,11 @@ function computeClosestHospitalToPatient(map) {
   }
   navigator.geolocation.getCurrentPosition(function(position) {
     var patientLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    // needs fixing
-    // closest = findClosestN(patientLocation, 1, map);
+    markClosestNHospitals(patientLocation, 1, map);
   });
 }
 
-function findClosestN(pt, numberOfResults, map) {
-  service = new google.maps.places.PlacesService(map);
-  var closest = [];
-  var markers = getAllHospitalMarkers();
-  console.log(markers);
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, markers[i]);
-    closest.push(markers[i]);
-  }
-  closest.sort(sortByDist);
-  return closest;
-}
-
-
-function sortByDist(a, b) {
-  return (a.distance - b.distance)
-}
-
-function getAllHospitalMarkers() {
+function markClosestNHospitals(pt, numberOfResults, map) {
   var url = "https://raw.githubusercontent.com/diksha/covid19-visualization/master/supplies.csv";
 	var request = new XMLHttpRequest();
 	request.open("GET", url, false);
@@ -76,7 +57,33 @@ function getAllHospitalMarkers() {
   for(var i=0;i<markers.length;i++){
     promises.push(addCoordinates(markers[i], service));
   }
-  Promise.all(promises).then(() => {return coords;});
+  Promise.all(promises).then(() => {
+    var closest = [];
+    for (var i = 0; i < coords.length; i++) {
+      coords[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt, coords[i]);
+      closest.push(coords[i]);
+    }
+    closest.sort(sortByDist);
+    var closestHospital = closest[0];
+    var pos = {
+      lat: closestHospital.lat(),
+      lng: closestHospital.lng(),
+    };
+    console.log(closestHospital);
+    var marker = new google.maps.Marker({
+      position: pos,
+      map: map,
+      icon: {
+        url: "https://raw.githubusercontent.com/google/material-design-icons/master/maps/1x_web/ic_local_hospital_black_24dp.png",
+      },
+      title: 'Closest Hospital',
+    });
+  });
+}
+
+
+function sortByDist(a, b) {
+  return (a.distance - b.distance);
 }
 
 function addCoordinates(marker, service) {
