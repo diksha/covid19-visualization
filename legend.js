@@ -22,7 +22,7 @@ function renderHospitalTypesLegend(map) {
   var icons = {
     makeShiftHospital: {
       name: 'Provisional Arrangement',
-      icon: 'https://raw.githubusercontent.com/medic/icon-library/master/forms_tasks_targets/PNGs/icon-people-nurse-crop%402x.png',
+      icon: 'https://raw.githubusercontent.com/diksha/covid19-visualization/master/icons/provisional.png',
     },
     hospital: {
       name: 'Medical Facility',
