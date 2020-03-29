@@ -61,7 +61,7 @@ function iterate(supply) {
 		};
 		marker =  new google.maps.Marker({
 			map: map,
-			position: supply[5],
+			position: supply[6],
 			icon: hospitalIcon,
 			title: title,
 			label: {
@@ -81,16 +81,16 @@ function iterate(supply) {
 		};
 		marker =  new google.maps.Marker({
 			map: map,
-			position: supply[5],
+			position: supply[6],
 			icon: hospitalIcon,
 			title: title,
 		});
 	}
 	markerArray.push(marker);
 	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent('<div><strong>' + supply[6] + '</strong><br>' +
-			'Address: ' + supply[7] + '<br>' +
-			'Phone: ' + supply[8] + '<br>' +
+		infowindow.setContent('<div><strong>' + supply[7] + '</strong><br>' +
+			'Address: ' + supply[8] + '<br>' +
+			'Phone: ' + supply[9] + '<br>' +
 			'Beds: ' + beds + '<br>' +
 			'Masks: ' + masks + '<br>' +
 			'Ventilators: ' + ventilators + '<br>' +
