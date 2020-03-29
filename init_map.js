@@ -1,5 +1,8 @@
 var map;
 var placeInformationArray;
+countryMap = {};
+stateMap = {};
+cityMap = {};
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.3688, lng: -122.0363},
@@ -63,7 +66,12 @@ function getPlaceInfo(supply, service) {
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
         placeInformationArray.push(placeInformation);
+<<<<<<< HEAD
       }
+=======
+        addToMaps(place.address_components, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
+      } 
+>>>>>>> 6bc4305c6c61ccee6541aa6bdff6ae0c2070fe45
       resolve();
     });
   });

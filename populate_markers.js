@@ -3,13 +3,12 @@ var ventilatorsSelected ;
 var bedsSelected ;
 var kitsSelected ;
 var markerArray;
-var countryMap = {};
-var stateMap = {};
-var cityMap = {}
+
 var placeInformationArray;
 function populateMarkers(map, placeInformationArr) {
 	infowindow = new google.maps.InfoWindow();
 	placeInformationArray = placeInformationArr;
+	console.log(countryMap);
 	recalculate();
 }
 
@@ -31,7 +30,7 @@ function iterate(supply) {
 	var address_components = supply[9];
 	var score = computeScoreForHospital(beds, masks, ventilators, kits);
 	var color = getColorForResourceValue(score);
-	addToMaps(address_components, kits, beds, masks, ventilators);
+	
 	var marker;
 	if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 		var hospitalStar = {
