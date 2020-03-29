@@ -11,7 +11,6 @@ function populateMarkers(map) {
 	infowindow = new google.maps.InfoWindow();
 	service = new google.maps.places.PlacesService(map);
 	getPlaceInformation(service);
-	console.log(countryMap);
 }
 
 function getPlaceInformation(service) {
@@ -40,8 +39,8 @@ function getPlaceInfo(supply, service) {
 				placeInformation.push(place.name);
 				placeInformation.push(place.formatted_address);
 				placeInformation.push(place.formatted_phone_number);
-				placeInformation.push(place.address_components);
 				placeInformationArray.push(placeInformation);
+				addToMaps(place.address_components, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
 			} 
 			resolve();
 		});
@@ -66,7 +65,7 @@ function iterate(supply) {
 	var address_components = supply[9];
 	var score = computeScoreForHospital(beds, masks, ventilators, kits);
 	var color = getColorForResourceValue(score);
-	addToMaps(address_components, kits, beds, masks, ventilators);
+	
 	var marker;
 	if(masksSelected+bedsSelected+kitsSelected+ventilatorsSelected == 1) {
 		var hospitalStar = {

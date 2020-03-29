@@ -1,5 +1,6 @@
-var zoomLevelState = 7;
-var zoomLevelCountry =4;
+var zoomLevelState = 5;
+var zoomLevelCountry =3;
+var zoomLevelCity = 7;
 function zoomEventHandler(map) {
 	map.addListener('zoom_changed', function(event) {
 	zoomLevel = map.getZoom();
@@ -7,6 +8,8 @@ function zoomEventHandler(map) {
 			showCountryMap();
 		} else if(zoomLevel <= zoomLevelState) {
 			showStateMap();
+		} else if (zoomLevel <= zoomLevelCity) {
+			showCityMap();
 		} else {
 			showMarkerMap();
 		}
@@ -23,4 +26,8 @@ function showStateMap() {
 
 function showMarkerMap() {
 	console.log("marker");
+}
+
+function showCityMap() {
+	console.log("city");
 }
