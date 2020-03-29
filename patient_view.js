@@ -69,7 +69,6 @@ function markClosestNHospitals(pt, numberOfResults, map) {
       lat: closestHospital.lat(),
       lng: closestHospital.lng(),
     };
-    console.log(closestHospital);
     var marker = new google.maps.Marker({
       position: pos,
       map: map,
@@ -79,6 +78,27 @@ function markClosestNHospitals(pt, numberOfResults, map) {
       title: 'Closest Hospital',
     });
     map.setCenter(pos);
+
+    var start = pt;
+    var end = closestHospital;
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(start);
+    bounds.extend(end);
+    map.fitBounds(bounds);
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+    var directionsService = new google.maps.DirectionsService();
+    directionsService.route(request, function (response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+          directionsDisplay.setMap(map);
+      } else {
+          alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+      }
+    });
   });
 }
 
