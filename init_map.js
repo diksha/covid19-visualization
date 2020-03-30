@@ -82,7 +82,7 @@ function serviceRequest(placeID, placeInformation, resolve) {
         placeInformation.push(place.formatted_address);
         placeInformation.push(place.formatted_phone_number);
         placeInformation.push(place.address_components);
-        addToMaps(place, placeInformation[5], placeInformation[2], placeInformation[3], placeInformation[4]);
+        addToMaps(place, placeInformation[4], placeInformation[1], placeInformation[2], placeInformation[3]);
         placeInformationArray.push(placeInformation);
         resolve();
       } else {
@@ -113,6 +113,20 @@ function addToMaps(place, kits, beds, masks, ventilators) {
     addResourceToAddressComponent(component, 'masks', masks);
     addResourceToAddressComponent(component, 'ventilators', ventilators);
   });
+}
+
+function getAddressComponentFromMap(map, name) {
+  if (map[name] == null) {
+    map[name] = {};
+  }
+  return map[name];
+}
+
+function addResourceToAddressComponent(component, resource, amount) {
+  if (component[resource] == null) {
+    component[resource] = 0;
+  }
+  component[resource] += parseInt(amount);
 }
 
 function getPlaceRequest(pid) {
