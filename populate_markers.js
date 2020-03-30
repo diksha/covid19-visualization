@@ -138,6 +138,9 @@ function getColorForResourceValue(resourceScore) {
 		POSITIVE: '#33a853',
 	}
 
+	if(bedsSelected+masksSelected+ventilatorsSelected+kitsSelected == 0){
+	return '#ffffff';
+	}
 	if(resourceScore < 0) {
 		return resourceStateToColorMapping.NEGATIVE;
 	} else if(resourceScore == 0) {
